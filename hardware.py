@@ -1,5 +1,7 @@
 import streamlit as st
-import sqlite3
+import sys
+__import__('pysqlite3')
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import requests
 from groq import Groq
 from PIL import Image
