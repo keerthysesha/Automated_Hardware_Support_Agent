@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 from groq import Groq
 from PIL import Image
+import sqlite3
 import io
 import base64
 import time
