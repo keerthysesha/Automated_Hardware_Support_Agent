@@ -203,10 +203,9 @@ def scrape_service_centers(brand, location):
 
 # Core application functions
 def analyze_image_for_defects(image_bytes):
-    """Analyze the uploaded image for hardware defects using LLaMA-3 Vision"""
+    """Analyze the uploaded image for hardware defects using LLaMA Vision"""
     try:
         base64_image = base64.b64encode(image_bytes).decode('utf-8')
-        
         messages = [
             {
                 "role": "user",
@@ -220,7 +219,6 @@ def analyze_image_for_defects(image_bytes):
                         2. Type of defect if present
                         3. Severity (Low/Medium/High)
                         4. Likely affected components
-                        
                         Respond in JSON format with these keys: defect_detected, defect_type, severity, affected_components"""
                     },
                     {
@@ -232,21 +230,18 @@ def analyze_image_for_defects(image_bytes):
                 ]
             }
         ]
-        
-        response = client.chat.completions.create(
-            model="llama-3.2-90b-vision-preview",
+        completion = client.chat.completions.create(
+            model="meta-llama/llama-4-scout-17b-16e-instruct",
             messages=messages,
             temperature=0.3,
             max_tokens=1024,
             response_format={"type": "json_object"}
         )
-        
-        return json.loads(response.choices[0].message.content)
-    
+        return json.loads(completion.choices[0].message.content)
     except Exception as e:
         st.error(f"Error analyzing image: {str(e)}")
         return None
-
+        
 def get_customer_by_service_tag(service_tag):
     """Retrieve customer details from database using service tag"""
     conn = sqlite3.connect('hardware_support.db')
